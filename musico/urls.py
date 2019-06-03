@@ -18,11 +18,24 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
+from django.shortcuts import redirect
+
+
+def redirectView(request):
+    if request.user.is_authenticated:
+        return redirect(to='/music/list/')
+    else:
+        return redirect(to='/home')
+
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^music/', include('music.urls')),
     url(r'^userauth/', include('userauth.urls')),
     url(r'^home/', TemplateView.as_view(template_name='userauth/home.html')),
+    url(r'^$', redirectView)
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
